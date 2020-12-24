@@ -1,0 +1,23 @@
+{
+	"manifest_version": 1,
+	"version": 1,
+	"type": "APP",
+	"desktop": {
+		"js": ["js/desktop.js"],
+		"css": ["css/51-modern-default.css", "css/desktop.css"]
+	},
+	"icon": "image/icon.png",
+	"config": {
+		"html": "html/config.html",
+		"js": ["js/config.js", "js/api.js"],
+		"css": ["css/51-modern-default.css", "css/config.css"]
+	},
+	"name": {
+		"en": "template",
+		"ja": "プラグインテンプレート"
+	},
+	"description": {
+		"en": "kintone-plugin-template",
+		"ja": "React+Typescriptでプラグインテンプレート"
+	}
+}

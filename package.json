@@ -1,0 +1,23 @@
+{
+  "name": "create-plugin-template",
+  "version": "1.0.0",
+  "description": "@kintone/create-plugin+webpack+typescriptが最強装備と思われ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/px-develop/create-plugin-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/px-develop/create-plugin-template/issues"
+  },
+  "homepage": "https://github.com/px-develop/create-plugin-template#readme",
+  "dependencies": {
+    "@kintone/create-plugin": "^3.1.4"
+  }
+}
