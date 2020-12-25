@@ -6,7 +6,7 @@ import React, { useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Button } from '@material-ui/core'
 /**API */
-import { saveConfig } from '../kintoneAPI'
+import { saveConfig, saveCancel } from '../kintoneAPI'
 import { AppContext } from '..'
 
 /** Styles */
@@ -33,9 +33,10 @@ export const SaveButton = ({ name }: Props) => {
 }
 export const CancelButton = ({ name }: Props) => {
 	const classes = useStyles()
+	const handleClick = () => saveCancel()
 	return (
 		<>
-			<Button variant="contained" color="primary" className={classes.root}>
+			<Button variant="contained" color="secondary" className={classes.root} onClick={handleClick}>
 				{name}
 			</Button>
 		</>

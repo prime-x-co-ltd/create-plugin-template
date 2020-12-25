@@ -10,7 +10,7 @@ import { SwitchList } from './components/SwitchList'
 import { SaveButton, CancelButton } from './components/Buttons'
 
 /**API */
-import { getApps, getFields } from './kintoneAPI'
+import { getApps, getFields, getConfig } from './kintoneAPI'
 /**Types */
 import { Utils } from './kintoneAPI'
 import { RespApp, RespField } from './kintoneAPI'
@@ -37,11 +37,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 }))
 
-export let PLUGIN_ID: string
-
-/** Reducer */
+/** Reducer | setConfigがメンドいので簡素な形でもつ */
 export type StateKeys = keyof State
 export type State = {
+	[key: string]: string | string[] | Date
 	app: string
 	single_line_text: string
 	date_field: string
@@ -108,6 +107,8 @@ const App: React.FC = () => {
 			}
 			setKintone(kintoneApiResp)
 		}
+		const config = getConfig()
+		console.log(config)
 		fetchData()
 	}, [])
 
@@ -115,7 +116,7 @@ const App: React.FC = () => {
 		<ThemeProvider theme={theme}>
 			<KintoneContext.Provider value={kintone}>
 				<AppContext.Provider value={{ state, dispatch }}>
-					<Typography variant="h3" gutterBottom>
+					<Typography variant="subtitle2" gutterBottom>
 						PLUGIN_ID: {Utils.PLUGIN_ID}
 					</Typography>
 

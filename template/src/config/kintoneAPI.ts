@@ -115,22 +115,41 @@ export const getFields: GetFields = async () => {
 		})
 		.catch((err) => Promise.reject(err))
 }
-/**Save-Config */
+/** Save-Config */
 export interface SaveConfig {
 	(state: State): void
 }
 export const saveConfig: SaveConfig = (state) => {
-	//いよいよProxyの出番と思われ。。
-	console.log(state)
-	const config = {
-		name: 'Tom',
-		age: '25',
-	}
-	kintone.plugin.app.setConfig(config)
+	// configはkey:valueじゃないとダメ
+	const config = JSON.stringify(state)
+	console.log('Bytes:', new Blob([config]).size)
+	kintone.plugin.app.setConfig({ config: config })
+	return
+}
+/** Validate-Config */
+interface ValicateConfig {
+	(state: State): void
+}
+export const valicateConfig: ValicateConfig = (state) => {
 	return
 }
 
-/**Load-PlugIn-ID */
+/** Save-Cancel*/
+interface SaveCancel {
+	(): void
+}
+export const saveCancel: SaveCancel = () => history.back()
+
+/** Get-Config */
+interface GetConfig {
+	(): string
+}
+export const getConfig: GetConfig = () => {
+	const config = kintone.plugin.app.getConfig(Utils.PLUGIN_ID)
+	return JSON.parse(config.config)
+}
+
+/** Load-PlugIn-ID */
 ;((PLUGIN_ID): void => {
 	Utils.PLUGIN_ID = PLUGIN_ID
 	return
