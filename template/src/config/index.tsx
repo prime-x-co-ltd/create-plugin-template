@@ -10,10 +10,9 @@ import { SwitchList } from './components/SwitchList'
 import { SaveButton, CancelButton } from './components/Buttons'
 
 /**API */
-import { getApps, getFields, getConfig } from './kintoneAPI'
+import { getApps, getFields, getDepartments, getConfig } from './kintoneAPI'
 /**Types */
-import { Utils } from './kintoneAPI'
-import { RespApp, RespField } from './kintoneAPI'
+import { RespApp, RespField, RespDepartment } from './kintoneAPI'
 
 /**kintoneのテーマカラーに調整 */
 const theme = createMuiTheme({
@@ -40,16 +39,16 @@ const useStyles = makeStyles((theme) => ({
 /** Reducer | setConfigがメンドいので簡素な形でもつ */
 export type StateKeys = keyof State
 export type State = {
-	[key: string]: string | string[] | Date
+	[key: string]: string | string[]
 	app: string
 	single_line_text: string
 	date_field: string
 	period: string
-	date: Date
+	date: string
 	department: string[]
 	token: string
 }
-type Action = { type: StateKeys; payload: string | string[] | Date }
+type Action = { type: StateKeys; payload: string | string[] }
 
 const reducer = (state: State, action: Action) => {
 	return {
@@ -62,6 +61,7 @@ const reducer = (state: State, action: Action) => {
 export type KintoneContextType = {
 	apps: RespApp[]
 	fields: RespField[]
+	departments: RespDepartment[]
 }
 export const KintoneContext = React.createContext({} as KintoneContextType)
 
@@ -75,13 +75,14 @@ export const AppContext = React.createContext({} as AppContextType)
 /** Initial Values */
 const initApp = { appId: '', name: '' }
 const initField = { label: '', code: '', type: '' }
-const initKintone = { apps: [initApp], fields: [initField] }
+const initDepartment = { key: '', name: '', checked: false }
+const initKintone = { apps: [initApp], fields: [initField], departments: [initDepartment] }
 const initState = {
 	app: '',
 	single_line_text: '',
 	date_field: '',
 	period: '',
-	date: new Date(),
+	date: '2020-12-24',
 	department: [],
 	token: '',
 }
@@ -104,11 +105,15 @@ const App: React.FC = () => {
 			const kintoneApiResp = {
 				apps: await getApps(),
 				fields: await getFields(),
+				departments: await getDepartments(),
 			}
 			setKintone(kintoneApiResp)
 		}
 		const config = getConfig()
-		console.log(config)
+		// console.log(config)
+		for (const key of Object.keys(config)) {
+			dispatch({ type: key, payload: config[key] })
+		}
 		fetchData()
 	}, [])
 
@@ -116,10 +121,6 @@ const App: React.FC = () => {
 		<ThemeProvider theme={theme}>
 			<KintoneContext.Provider value={kintone}>
 				<AppContext.Provider value={{ state, dispatch }}>
-					<Typography variant="subtitle2" gutterBottom>
-						PLUGIN_ID: {Utils.PLUGIN_ID}
-					</Typography>
-
 					<Typography variant="body1" gutterBottom>
 						アプリを選択
 						<span className={classes.required}>*</span>
@@ -141,7 +142,6 @@ const App: React.FC = () => {
 					<Typography variant="body1" gutterBottom>
 						期を入力
 						<span className={classes.required}>* </span>
-						{state.period}
 					</Typography>
 					<BasicTextField name="period" validate={ValidateNumber} />
 
@@ -149,13 +149,13 @@ const App: React.FC = () => {
 						日付を選択
 						<span className={classes.required}>* </span>
 					</Typography>
-					<DatePicker />
+					<DatePicker name="date" />
 
 					<Typography variant="body1" gutterBottom>
 						利用する部署
 						<span className={classes.required}>* </span>
 					</Typography>
-					<SwitchList />
+					<SwitchList name="department" />
 
 					<Typography variant="body1" gutterBottom>
 						APIトークン

@@ -3,8 +3,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+/**Context */
 import { AppContext } from '..'
-import { getDate } from 'date-fns'
+/**Types */
+import { StateKeys } from '../index'
 
 /** Styles */
 const useStyles = makeStyles((theme) => ({
@@ -21,13 +23,11 @@ const convYYYYMMDD = (date: Date) => {
 	return `${Y}-${M}-${D}`
 }
 
-export const DatePicker = () => {
+type Props = { name: StateKeys }
+export const DatePicker = ({ name }: Props) => {
 	const classes = useStyles()
-	const { dispatch } = useContext(AppContext)
-	// 外部ライブラリなのでローカルステート持たないとダメみたい
-	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date('2020-12-23'))
+	const { state, dispatch } = useContext(AppContext)
 	const handleDateChange = (date: Date | null) => {
-		setSelectedDate(date)
 		if (date) {
 			dispatch({ type: 'date', payload: convYYYYMMDD(date) })
 		}
@@ -44,7 +44,7 @@ export const DatePicker = () => {
 				margin="normal"
 				size="small"
 				autoOk={true}
-				value={selectedDate}
+				value={state[name]}
 				onChange={handleDateChange}
 			/>
 		</MuiPickersUtilsProvider>

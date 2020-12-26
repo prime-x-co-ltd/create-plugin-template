@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 /**Components */
 import List from '@material-ui/core/List'
@@ -6,7 +6,8 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Switch from '@material-ui/core/Switch'
-import { AppContext } from '..'
+/**Context & Types*/
+import { AppContext, KintoneContext, StateKeys } from '..'
 
 /** Styles */
 const useStyles = makeStyles((theme) => ({
@@ -21,15 +22,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 }))
 
-export const SwitchList = () => {
+type Props = { name: StateKeys }
+export const SwitchList = ({ name }: Props) => {
 	const classes = useStyles()
-	const { dispatch } = useContext(AppContext)
-	const [list, setList] = useState([
-		{ key: 0, name: '経理', checked: false },
-		{ key: 1, name: '人事', checked: false },
-		{ key: 2, name: '事業推進部', checked: false },
-		{ key: 3, name: 'アカウント部', checked: false },
-	])
+	const kintone = useContext(KintoneContext)
+	const { state, dispatch } = useContext(AppContext)
+	const [list, setList] = useState(kintone.departments)
+
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const updated = list.map((item) => {
 			if (item.name === event.target.name) {
@@ -46,6 +45,18 @@ export const SwitchList = () => {
 		})
 		dispatch({ type: 'department', payload: checked })
 	}
+
+	useEffect(() => {
+		const list = kintone.departments.map((department) => {
+			const checked = state[name] as string[]
+			if (checked.find((item) => item === department.name)) {
+				department.checked = true
+			}
+			return department
+		})
+		if (list) setList(list)
+	}, [name, state, kintone])
+
 	return (
 		<List className={classes.list}>
 			{list.map((item) => (
@@ -58,4 +69,16 @@ export const SwitchList = () => {
 			))}
 		</List>
 	)
+	// return (
+	// 	<List className={classes.list}>
+	// 		{list.map((item) => (
+	// 			<ListItem key={item.key}>
+	// 				<ListItemText primary={item.name} />
+	// 				<ListItemSecondaryAction>
+	// 					<Switch name={item.name} checked={item.checked} color="primary" onChange={handleChange} />
+	// 				</ListItemSecondaryAction>
+	// 			</ListItem>
+	// 		))}
+	// 	</List>
+	// )
 }

@@ -25,7 +25,7 @@ type Props = {
 
 export const BasicTextField = ({ name, validate }: Props) => {
 	const classes = useStyles()
-	const { dispatch } = useContext(AppContext)
+	const { state, dispatch } = useContext(AppContext)
 	const [isError, setIsError] = useState(false)
 
 	const handleChangeValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +44,7 @@ export const BasicTextField = ({ name, validate }: Props) => {
 				variant="outlined"
 				size="small"
 				error={isError}
+				value={state[name]}
 				onChange={handleChangeValidation}
 			/>
 			{isError && (

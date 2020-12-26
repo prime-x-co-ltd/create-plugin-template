@@ -20,7 +20,6 @@ type Props = { name: string }
 export const SaveButton = ({ name }: Props) => {
 	const classes = useStyles()
 	const { state } = useContext(AppContext)
-	// event: React.MouseEvent<HTMLButtonElement, MouseEvent>
 	const handeClick = () => saveConfig(state)
 
 	return (

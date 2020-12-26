@@ -61,13 +61,11 @@ type Props = {
 export const SelectBox = ({ apiType, name, fieldType }: Props) => {
 	const classes = useStyles()
 	const kintone = useContext(KintoneContext)
-	const { dispatch } = useContext(AppContext)
+	const { state, dispatch } = useContext(AppContext)
 
 	const [options, setOptions] = useState([{ label: '', value: '' }])
-	const [option, setOption] = useState('')
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setOption(event.target.value)
 		dispatch({ type: name, payload: event.target.value })
 	}
 
@@ -138,7 +136,7 @@ export const SelectBox = ({ apiType, name, fieldType }: Props) => {
 			id="select-outlined"
 			variant="outlined"
 			size="small"
-			value={option}
+			value={state[name]}
 			onChange={handleChange}
 			// helperText="Please select your app"
 		>

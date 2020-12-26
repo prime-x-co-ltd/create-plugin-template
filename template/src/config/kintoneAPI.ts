@@ -33,6 +33,8 @@ export namespace Utils {
 	}
 }
 
+/** Get-Apps */
+
 /** Response-Type: getApps/dammyGetApps - Allow-Braket-Notation */
 export type RespApp = {
 	[key: string]: string
@@ -76,6 +78,8 @@ export const getApps: GetApps = () => {
 	})
 }
 
+/** Get-Fields */
+
 /** Response-Type: getFields/dammyGetFields - Allow-Braket-Notation */
 export type RespField = {
 	[key: string]: string
@@ -115,6 +119,26 @@ export const getFields: GetFields = async () => {
 		})
 		.catch((err) => Promise.reject(err))
 }
+
+/** Get-Departments */
+
+export type RespDepartment = {
+	key: string
+	name: string
+	checked: boolean
+}
+interface GetDepartments {
+	(): Promise<RespDepartment[]>
+}
+export const getDepartments: GetDepartments = async () => {
+	return Promise.resolve([
+		{ key: 'ac', name: '経理', checked: false },
+		{ key: 'hr', name: '人事', checked: false },
+		{ key: 'bp', name: '事業推進部', checked: false },
+		{ key: 'ap', name: 'アカウント部', checked: false },
+	])
+}
+
 /** Save-Config */
 export interface SaveConfig {
 	(state: State): void
@@ -126,13 +150,6 @@ export const saveConfig: SaveConfig = (state) => {
 	kintone.plugin.app.setConfig({ config: config })
 	return
 }
-/** Validate-Config */
-interface ValicateConfig {
-	(state: State): void
-}
-export const valicateConfig: ValicateConfig = (state) => {
-	return
-}
 
 /** Save-Cancel*/
 interface SaveCancel {
@@ -142,7 +159,7 @@ export const saveCancel: SaveCancel = () => history.back()
 
 /** Get-Config */
 interface GetConfig {
-	(): string
+	(): State
 }
 export const getConfig: GetConfig = () => {
 	const config = kintone.plugin.app.getConfig(Utils.PLUGIN_ID)
