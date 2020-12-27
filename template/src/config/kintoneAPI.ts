@@ -1,14 +1,11 @@
 /**kintone-Types */
 import { Layout, App } from '@kintone/rest-api-client/lib/client/types'
-import { State } from './index'
+import { State } from './PlugInProvider'
 
 const appid = kintone.app.getId()
 
 /**Utils | namespaceは非推奨です（使いたかっただけ） */
 export namespace Utils {
-	/**PlugIn-ID */
-	export let PLUGIN_ID: string
-
 	interface FieldSort {
 		(layout: Layout, codes?: string[]): string[]
 	}
@@ -17,7 +14,11 @@ export namespace Utils {
 			switch (values.type) {
 				case 'ROW':
 					values.fields.forEach((value) => {
-						if (value.type !== 'SPACER' && value.type !== 'LABEL' && value.type !== 'HR')
+						if (
+							value.type !== 'SPACER' &&
+							value.type !== 'LABEL' &&
+							value.type !== 'HR'
+						)
 							codes.push(value.code)
 					})
 					break
@@ -52,7 +53,9 @@ export const getApps: GetApps = () => {
 		const innerLoop: InnerLoop = (offset = 0, _apps) => {
 			return new Promise((resolve, reject) => {
 				kintone
-					.api(kintone.api.url('/k/v1/apps', true), 'GET', { offset: offset })
+					.api(kintone.api.url('/k/v1/apps', true), 'GET', {
+						offset: offset,
+					})
 					.then((resp) => {
 						let apps: RespApp[] = resp.apps.map((app: App) => {
 							return {
@@ -91,7 +94,6 @@ interface GetFields {
 	(): Promise<RespField[]>
 }
 export const getFields: GetFields = async () => {
-	console.log(Utils.PLUGIN_ID)
 	return kintone
 		.api(kintone.api.url('/k/v1/app/form/layout', true), 'GET', {
 			app: appid,
@@ -159,15 +161,9 @@ export const saveCancel: SaveCancel = () => history.back()
 
 /** Get-Config */
 interface GetConfig {
-	(): State
+	(PLUGIN_ID: string): State
 }
-export const getConfig: GetConfig = () => {
-	const config = kintone.plugin.app.getConfig(Utils.PLUGIN_ID)
+export const getConfig: GetConfig = (PLUGIN_ID) => {
+	const config = kintone.plugin.app.getConfig(PLUGIN_ID)
 	return JSON.parse(config.config)
 }
-
-/** Load-PlugIn-ID */
-;((PLUGIN_ID): void => {
-	Utils.PLUGIN_ID = PLUGIN_ID
-	return
-})(kintone.$PLUGIN_ID)

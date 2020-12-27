@@ -1,35 +1,38 @@
-import React, { useContext, useState } from 'react'
+import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns'
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+import {
+	MuiPickersUtilsProvider,
+	KeyboardDatePicker,
+} from '@material-ui/pickers'
 /**Context */
-import { AppContext } from '..'
+import { usePlugInContext } from '../PlugInProvider'
 /**Types */
-import { StateKeys } from '../index'
+import { StateKeys } from '../PlugInProvider'
 
 /** Styles */
 const useStyles = makeStyles((theme) => ({
 	root: {
 		margin: theme.spacing(1),
-		width: '25ch',
+		width: '20ch',
 	},
 }))
-
-const convYYYYMMDD = (date: Date) => {
-	const Y = date.getFullYear()
-	const M = ('00' + (date.getMonth() + 1)).slice(-2)
-	const D = ('00' + date.getDate()).slice(-2)
-	return `${Y}-${M}-${D}`
-}
-
+/** Types: DatePicker */
 type Props = { name: StateKeys }
+/** DatePicker */
 export const DatePicker = ({ name }: Props) => {
 	const classes = useStyles()
-	const { state, dispatch } = useContext(AppContext)
+	const { state, dispatch } = usePlugInContext()
+	const dateToString = (date: Date) => {
+		const Y = date.getFullYear()
+		const M = ('00' + (date.getMonth() + 1)).slice(-2)
+		const D = ('00' + date.getDate()).slice(-2)
+		return `${Y}-${M}-${D}`
+	}
 	const handleDateChange = (date: Date | null) => {
 		if (date) {
-			dispatch({ type: 'date', payload: convYYYYMMDD(date) })
+			dispatch({ type: 'date', payload: dateToString(date) })
 		}
 	}
 	return (

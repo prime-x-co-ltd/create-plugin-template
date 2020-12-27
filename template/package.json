@@ -6,7 +6,8 @@
 		"scripts": "node scripts/npm-start.js",
 		"upload": "kintone-plugin-uploader dist/contents.zip --watch --waiting-dialog-ms 3000",
 		"develop": "npm run build -- --watch",
-		"build": "webpack",
+		"build:dev": "webpack --watch",
+		"build:prod": "webpack",
 		"zip": "kintone-plugin-packer --ppk dist/contents.ppk --out dist/contents.zip contents",
 		"lint": "eslint src"
 	},

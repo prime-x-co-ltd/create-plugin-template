@@ -1,41 +1,49 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 /**Context */
-import { AppContext } from '../index'
+import { usePlugInContext } from '../PlugInProvider'
 /**Componets */
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 /**Types */
-import { StateKeys } from '../index'
+import { StateKeys } from '../PlugInProvider'
+
+/**
+ * 【TIPS】
+ *  同じコンポーネントで分岐処理を書くなら、別コンポーネントにする
+ *  コードの重複<<<可読性、シンプルさを重視する
+ */
 
 /** Styles */
 const useStyles = makeStyles((theme) => ({
 	root: {
 		margin: theme.spacing(1),
-		width: '25ch',
+		width: '35ch',
 	},
 }))
+/** Types: TextField */
+type Props = { name: StateKeys }
 
-type Props = {
-	name: StateKeys
-	// validateのパターン増えたらどうしよう。。
-	validate?: (value: number) => boolean
-}
-
-export const BasicTextField = ({ name, validate }: Props) => {
+/** TextField-With-NumberValidate */
+export const NumberValidateTextField = ({ name }: Props) => {
 	const classes = useStyles()
-	const { state, dispatch } = useContext(AppContext)
+	const { state, dispatch } = usePlugInContext()
 	const [isError, setIsError] = useState(false)
 
-	const handleChangeValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (validate) setIsError(validate(parseInt(event.target.value)))
+	/** Validation */
+	const validateNumber = (value: number) => {
+		return isFinite(value) ? false : true
+	}
+	const handleChangeValidation = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setIsError(validateNumber(parseInt(event.target.value)))
 		dispatch({
 			type: name,
 			payload: event.target.value,
 		})
 	}
-
 	return (
 		<Grid container alignItems="center">
 			<TextField
@@ -49,9 +57,33 @@ export const BasicTextField = ({ name, validate }: Props) => {
 			/>
 			{isError && (
 				<Typography variant="body2" color="error" display="inline">
-					数字です
+					数字を入力してください
 				</Typography>
 			)}
+		</Grid>
+	)
+}
+
+/**TextField-Without-Validate */
+export const BasicTextField = ({ name }: Props) => {
+	const classes = useStyles()
+	const { state, dispatch } = usePlugInContext()
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		dispatch({
+			type: name,
+			payload: event.target.value,
+		})
+	}
+	return (
+		<Grid container alignItems="center">
+			<TextField
+				autoComplete="off"
+				className={classes.root}
+				variant="outlined"
+				size="small"
+				value={state[name]}
+				onChange={handleChange}
+			/>
 		</Grid>
 	)
 }

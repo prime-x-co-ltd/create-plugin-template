@@ -3,22 +3,23 @@
  * Context経由で親ステートを更新する
  */
 
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 /**Components */
 import TextField from '@material-ui/core/TextField'
 import MenuItem from '@material-ui/core/MenuItem'
 /**Context */
-import { KintoneContext, AppContext } from '../index'
+import { useKintoneContext } from '../index'
+import { usePlugInContext } from '../PlugInProvider'
 /**Types */
-import { StateKeys } from '../index'
+import { StateKeys } from '../PlugInProvider'
 import { RespApp, RespField } from '../kintoneAPI'
 
 /** Styles */
 const useStyles = makeStyles((theme) => ({
 	root: {
 		margin: theme.spacing(1),
-		width: '25ch',
+		width: '35ch',
 	},
 }))
 
@@ -44,26 +45,26 @@ const map = {
 		['name', 'label'],
 	]),
 }
-
-/** SelectBox */
-
+/** Types: ApiType */
 type ApiType = 'APP' | 'FIELD'
+/** Types: SelectBox */
 type Props = {
 	apiType: ApiType
 	name: StateKeys
 	fieldType?: string
 }
 /**
+ * SelectBox
  * @param {ApiType} apiType API種別
  * @param {StateKeys} name 親ステートのプロパティ
  * @param {string} フィールド形式（任意）
  */
 export const SelectBox = ({ apiType, name, fieldType }: Props) => {
 	const classes = useStyles()
-	const kintone = useContext(KintoneContext)
-	const { state, dispatch } = useContext(AppContext)
+	const kintoneResp = useKintoneContext()
+	const { state, dispatch } = usePlugInContext()
 
-	const [options, setOptions] = useState([{ label: '', value: '' }])
+	const [options, setOptions] = React.useState([{ label: '', value: '' }])
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		dispatch({ type: name, payload: event.target.value })
@@ -77,7 +78,11 @@ export const SelectBox = ({ apiType, name, fieldType }: Props) => {
 		}
 	}
 	const mapSelector: MapSelector = (obj) => {
-		if (obj !== null && typeof obj === 'object' && typeof obj.appId === 'string') {
+		if (
+			obj !== null &&
+			typeof obj === 'object' &&
+			typeof obj.appId === 'string'
+		) {
 			return { map: map.app, respType: 'APP' }
 		} else {
 			return { map: map.field, respType: 'FIELD' }
@@ -87,7 +92,7 @@ export const SelectBox = ({ apiType, name, fieldType }: Props) => {
 	interface TypeFilter {
 		(data: RespType[], respType: ApiType): RespType[]
 	}
-	const typeFilter: TypeFilter = useCallback(
+	const typeFilter: TypeFilter = React.useCallback(
 		(data, respType) => {
 			if (respType !== 'FIELD' || !fieldType) return data
 			return data.filter((field) => field.type === fieldType)
@@ -98,7 +103,7 @@ export const SelectBox = ({ apiType, name, fieldType }: Props) => {
 	interface Mapper {
 		(data: RespType[]): Option[]
 	}
-	const mapper: Mapper = useCallback(
+	const mapper: Mapper = React.useCallback(
 		(data) => {
 			const { map, respType } = mapSelector(data[0])
 			const _data = typeFilter(data, respType)
@@ -117,16 +122,16 @@ export const SelectBox = ({ apiType, name, fieldType }: Props) => {
 		[typeFilter]
 	)
 	/** Initialize */
-	useEffect(() => {
+	React.useEffect(() => {
 		switch (apiType) {
 			case 'APP':
-				setOptions(mapper(kintone.apps))
+				setOptions(mapper(kintoneResp.apps))
 				break
 			case 'FIELD':
-				setOptions(mapper(kintone.fields))
+				setOptions(mapper(kintoneResp.fields))
 				break
 		}
-	}, [apiType, mapper, kintone])
+	}, [apiType, mapper, kintoneResp])
 
 	/** Render */
 	return (
