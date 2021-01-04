@@ -1,7 +1,7 @@
 /**
  * Architecture | There-Layer Model
  *  1st-Layer | index.tsx | kintoneAPIの処理＆管理レイヤー
- *  2nd-Layer | PlugInProvider.tsxt | Reducerによる状態管理レイヤー
+ *  2nd-Layer | PlugInProvider.tsx | Reducerによる状態管理レイヤー
  *  3rd-Layer | PlugIn.tsx | React-Componentトップレイヤー
  */
 

@@ -8,6 +8,7 @@ export type PlugInContextType = {
 	config: State
 }
 export const PlugInContext = React.createContext({} as PlugInContextType)
+export const usePluginContext = () => React.useContext(PlugInContext)
 
 /**Kintone-Events */
 ;((PLUGIN_ID) => {

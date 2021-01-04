@@ -22,9 +22,8 @@ import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import StarBorder from '@material-ui/icons/StarBorder'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
-
 /**Context */
-import { PlugInContext } from '../index'
+import { usePluginContext } from '../index'
 
 /** Styles */
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const MyButton = () => {
 	const classes = useStyles()
-	const { config } = React.useContext(PlugInContext)
+	const { config } = usePluginContext()
 	const [openDialog, setOpenDialog] = useState(false)
 	const [open, setOpen] = useState(false)
 
@@ -53,7 +52,10 @@ export const MyButton = () => {
 
 	return (
 		<>
-			<IconButton aria-label="page-view" className={classes.root} onClick={handleOpenDialog}>
+			<IconButton
+				aria-label="page-view"
+				className={classes.root}
+				onClick={handleOpenDialog}>
 				<PageviewIcon fontSize="large" />
 			</IconButton>
 			<Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -61,36 +63,55 @@ export const MyButton = () => {
 					<List
 						className={classes.list}
 						component="nav"
-						subheader={<ListSubheader component="div">PlugIn-Confiturations</ListSubheader>}>
+						subheader={
+							<ListSubheader component="div">
+								PlugIn-Confiturations
+							</ListSubheader>
+						}>
 						<ListItem button>
 							<ListItemIcon>
 								<AppsIcon />
 							</ListItemIcon>
-							<ListItemText primary="APP ID" secondary={config.app} />
+							<ListItemText
+								primary="APP ID"
+								secondary={config.app}
+							/>
 						</ListItem>
 						<ListItem button>
 							<ListItemIcon>
 								<TextFieldsIcon />
 							</ListItemIcon>
-							<ListItemText primary="TEXT FIELD" secondary={config.single_line_text} />
+							<ListItemText
+								primary="TEXT FIELD"
+								secondary={config.single_line_text}
+							/>
 						</ListItem>
 						<ListItem button>
 							<ListItemIcon>
 								<TextFieldsIcon />
 							</ListItemIcon>
-							<ListItemText primary="DATE FIELD" secondary={config.date_field} />
+							<ListItemText
+								primary="DATE FIELD"
+								secondary={config.date_field}
+							/>
 						</ListItem>
 						<ListItem button>
 							<ListItemIcon>
 								<AccessTimeIcon />
 							</ListItemIcon>
-							<ListItemText primary="PERIOD" secondary={config.period} />
+							<ListItemText
+								primary="PERIOD"
+								secondary={config.period}
+							/>
 						</ListItem>
 						<ListItem button>
 							<ListItemIcon>
 								<TodayIcon />
 							</ListItemIcon>
-							<ListItemText primary="DATE" secondary={config.date} />
+							<ListItemText
+								primary="DATE"
+								secondary={config.date}
+							/>
 						</ListItem>
 						<ListItem button onClick={handleClick}>
 							<ListItemIcon>
@@ -102,7 +123,10 @@ export const MyButton = () => {
 						<Collapse in={open} timeout="auto" unmountOnExit>
 							<List component="div" disablePadding>
 								{config.department.map((item) => (
-									<ListItem key={item} button className={classes.nested}>
+									<ListItem
+										key={item}
+										button
+										className={classes.nested}>
 										<ListItemIcon>
 											<StarBorder />
 										</ListItemIcon>
@@ -115,12 +139,18 @@ export const MyButton = () => {
 							<ListItemIcon>
 								<VpnKeyIcon />
 							</ListItemIcon>
-							<ListItemText primary="API TOKEN" secondary={config.token} />
+							<ListItemText
+								primary="API TOKEN"
+								secondary={config.token}
+							/>
 						</ListItem>
 					</List>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleCloseDialog} color="primary" autoFocus>
+					<Button
+						onClick={handleCloseDialog}
+						color="primary"
+						autoFocus>
 						OK
 					</Button>
 					<Button onClick={handleCloseDialog} color="primary">

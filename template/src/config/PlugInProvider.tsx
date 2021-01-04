@@ -1,5 +1,5 @@
 /**
- * 2nd-Layer
+ * 2nd-Layer | PlugInProvider.tsx | Reducerによる状態管理レイヤー
  */
 import * as React from 'react'
 
