@@ -42,6 +42,7 @@ module.exports = {
 	},
 	resolve: {
 		extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+		mainFields: ['module', 'main'],
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
@@ -50,7 +51,8 @@ module.exports = {
 		}),
 		new Dotenv(),
 		new KintonePlugin({
-			manifestJSONPath: './contents/manifest.json' /* 参照するmanifest.json */,
+			manifestJSONPath:
+				'./contents/manifest.json' /* 参照するmanifest.json */,
 			privateKeyPath: './dist/contents.ppk' /* 参照するprivate-key */,
 			pluginZipPath: './dist/contents.zip' /* 生成するzipのpath */,
 		}),
