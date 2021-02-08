@@ -8,12 +8,12 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 /**Context&Reducer */
 import { usePlugInContext } from './PlugInProvider'
 /**Components */
-import { InputForm } from './components/InputForm'
-import { BasicTextField, NumberValidateTextField } from './components/TextField'
-import { DatePicker } from './components/DatePicker'
-import { SelectBox } from './components/SelectBox'
-import { SwitchList } from './components/SwitchList'
-import { ButtonForm } from './components/ButtonForm'
+// import { InputForm } from './components/InputForm'
+// import { BasicTextField, NumberValidateTextField } from './components/TextField'
+// import { DatePicker } from './components/DatePicker'
+// import { SelectBox } from './components/SelectBox'
+// import { SwitchList } from './components/SwitchList'
+// import { ButtonForm } from './components/ButtonForm'
 /**Types */
 import { State } from './PlugInProvider'
 
@@ -40,7 +40,7 @@ export const PlugIn: React.FC<Props> = ({ config }) => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<InputForm title="アプリを選択" required>
+			{/* <InputForm title="アプリを選択" required>
 				<SelectBox name="app" apiType="APP" />
 			</InputForm>
 			<InputForm title="フィールドを選択【文字列】" required>
@@ -65,7 +65,7 @@ export const PlugIn: React.FC<Props> = ({ config }) => {
 			<InputForm title="APIトークン">
 				<BasicTextField name="token" />
 			</InputForm>
-			<ButtonForm />
+			<ButtonForm /> */}
 		</ThemeProvider>
 	)
 }

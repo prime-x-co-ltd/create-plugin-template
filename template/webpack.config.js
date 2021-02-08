@@ -7,9 +7,10 @@ module.exports = {
 	// mode: 'development',
 	mode: 'production',
 	entry: {
-		config: './src/config/index.tsx',
-		desktop: './src/desktop/index.tsx',
-		api: './src/config/kintoneAPI.ts',
+		demo: './src/config/demo.tsx',
+		// config: './src/config/index.tsx',
+		// desktop: './src/desktop/index.tsx',
+		// api: './src/config/kintoneAPI.ts',
 	},
 	output: {
 		path: path.resolve(__dirname, 'contents/js'),

@@ -7,19 +7,9 @@ import * as React from 'react'
  *  kintone-PlugInに関してはsetConfigがkey/valueしか受け付けないので
  *  簡素なデータ形式で状態管理する
  */
-export type StateKeys = keyof State
-export type State = {
-	[key: string]: string | string[]
-	app: string
-	single_line_text: string
-	date_field: string
-	period: string
-	date: string
-	department: string[]
-	token: string
-}
-type Action = { type: StateKeys; payload: string | string[] }
 
+export type State = { [key: string]: string }
+export type Action = { type: string; payload: string }
 export const reducer = (state: State, action: Action) => {
 	return {
 		...state,
@@ -36,15 +26,7 @@ const PlugInContext = React.createContext({} as PlugInContextType)
 export const usePlugInContext = () => React.useContext(PlugInContext)
 
 /**Initial-Values */
-const initState = {
-	app: '',
-	single_line_text: '',
-	date_field: '',
-	period: '',
-	date: '2020-12-24',
-	department: [],
-	token: '',
-}
+const initState = {}
 
 export const PlugInContextProvider: React.FC = ({ children }) => {
 	const [state, dispatch] = React.useReducer(reducer, initState)
